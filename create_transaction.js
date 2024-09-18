@@ -6,6 +6,18 @@ const midtrans = new midtransClient.Snap({
 });
 
 module.exports = async (req, res) => {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', 'https://vercel.com/hexagon66613s-projects/warung-agen/8DvFdHXFSdraEF5UaXCBCkkRBc5e'); // Replace with your frontend URL
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS'); // Allow specific methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  // Handle POST request
   if (req.method === 'POST') {
     try {
       const orderDetails = req.body;
