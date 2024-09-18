@@ -1,11 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const products = [
-    { id: 1, name: 'Product 1', price: 10000 },
-    { id: 2, name: 'Product 2', price: 20000 },
-  ];
-
+  let products = []; // Start with an empty array to fetch products from the API
   let cart = [];
 
+  // Function to fetch products from the API
+  const fetchProducts = () => {
+    fetch('/api/products')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        products = data; // Update the products array with the fetched data
+        displayProducts(); // Call displayProducts after fetching
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  };
+
+  // Function to display products
   const displayProducts = () => {
     const productList = document.getElementById('product-list');
     productList.innerHTML = '';
@@ -22,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  // Function to add products to cart
   window.addToCart = (productId) => {
     const product = products.find(p => p.id === productId);
     const quantityInput = document.getElementById(`quantity-${productId}`);
@@ -36,10 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Function to calculate total amount
   const calculateTotalAmount = () => {
     return cart.reduce((total, product) => total + product.price, 0);
   };
 
+  // Function to update cart display
   const updateCartDisplay = () => {
     const cartItems = document.getElementById('cart-items');
     if (cart.length === 0) {
@@ -66,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Function to update item quantity
   window.updateItemQuantity = (productId) => {
     const quantityInput = document.getElementById(`cart-quantity-${productId}`);
     const newQuantity = parseInt(quantityInput.value, 10) || 1;
@@ -77,11 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartDisplay();
   };
 
+  // Function to remove an item completely from the cart
   window.removeItem = (productId) => {
     cart = cart.filter(p => p.id !== productId);
     updateCartDisplay();
   };
 
+  // Event listener for checkout button
   document.getElementById('checkout').addEventListener('click', () => {
     if (cart.length === 0) {
       alert('Your cart is empty!');
@@ -97,13 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     fetch('https://warung-agen.vercel.app/api/create_transaction', { // Update this URL
-     method: 'POST',
-     headers: {
-      'Content-Type': 'application/json',
-     },
-     body: JSON.stringify(orderDetails),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderDetails),
     })
-
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -122,6 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  displayProducts();
-  updateCartDisplay();
+  // Fetch products on page load
+  fetchProducts();
 });
