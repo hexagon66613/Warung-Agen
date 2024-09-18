@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
         };
 
-        fetch('https://warung-agen.vercel.app/api/create_transaction', { // Update this URL
+        fetch('https://warung-agen.vercel.app/api/create_transaction', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
