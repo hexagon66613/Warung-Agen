@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     };
 
-    fetch('https://vercel.com/hexagon66613s-projects/warung-agen/HamdBVyDUpaEktT3HQnAWroJdBcP/api/create_transaction', { // Update this URL
+    fetch('https://warung-agen.vercel.app/api/create_transaction', { // Update this URL
      method: 'POST',
      headers: {
       'Content-Type': 'application/json',
