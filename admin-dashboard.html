@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <button id="view-orders">View Orders</button>
+  <button id="manage-products">Manage Products</button>
+
+  <script>
+    document.getElementById('view-orders').addEventListener('click', () => {
+      // Fetch and display orders
+      fetch('/api/orders', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data); // Display orders as needed
+      });
+    });
+
+    document.getElementById('manage-products').addEventListener('click', () => {
+      // Fetch and display products, provide options to add/update/delete
+      fetch('/api/products', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data); // Display products as needed
+      });
+    });
+  </script>
+</body>
+</html>
