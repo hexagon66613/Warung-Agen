@@ -96,13 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     };
 
-    fetch('/api/create_transaction', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderDetails),
+    fetch('https://your-vercel-url/api/create_transaction', { // Update this URL
+     method: 'POST',
+     headers: {
+      'Content-Type': 'application/json',
+     },
+     body: JSON.stringify(orderDetails),
     })
+
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
