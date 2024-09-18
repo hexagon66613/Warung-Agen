@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     };
 
-    fetch('warung-agen-is16phg7c-hexagon66613s-projects.vercel.app', { // Update this URL
+    fetch('https://warung-agen-is16phg7c-hexagon66613s-projects.vercel.app/api/create_transaction', { // Update this URL
      method: 'POST',
      headers: {
       'Content-Type': 'application/json',
