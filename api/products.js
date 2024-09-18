@@ -1,4 +1,5 @@
 const products = []; // Replace with a database in production
+let nextId = 1; // Variable to keep track of product IDs
 
 module.exports = (req, res) => {
   if (req.method === 'GET') {
@@ -8,7 +9,7 @@ module.exports = (req, res) => {
   if (req.method === 'POST') {
     try {
       const newProduct = req.body; // Assuming you're sending product data in the body
-      // Validate the new product data as needed
+      newProduct.id = nextId++; // Assign a unique ID to the new product
       products.push(newProduct); // Add to products array
       return res.status(201).json({ message: 'Product added successfully', product: newProduct });
     } catch (error) {
