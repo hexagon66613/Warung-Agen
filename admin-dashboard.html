@@ -11,10 +11,15 @@
   <button id="view-orders">View Orders</button>
   <button id="manage-products">Manage Products</button>
 
+  <div id="orders-list" style="display:none;">
+    <h2>Orders</h2>
+    <div id="order-details"></div>
+  </div>
+
   <script>
     document.getElementById('view-orders').addEventListener('click', () => {
       // Fetch and display orders
-      fetch('/api/orders', {
+      fetch('https://warung-agen.vercel.app/api/orders', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
@@ -23,22 +28,26 @@
       .then(response => response.json())
       .then(data => {
         console.log(data); // Display orders as needed
-      });
+        displayOrders(data);
+      })
+      .catch(error => console.error('Error fetching orders:', error));
     });
 
     document.getElementById('manage-products').addEventListener('click', () => {
-      // Fetch and display products, provide options to add/update/delete
-      fetch('/api/products', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data); // Display products as needed
-      });
+      // Redirect to manage products page
+      window.location.href = 'manage-products.html';
     });
+
+    function displayOrders(orders) {
+      const orderDetails = document.getElementById('order-details');
+      orderDetails.innerHTML = ''; // Clear previous orders
+      orders.forEach(order => {
+        const orderItem = document.createElement('div');
+        orderItem.innerHTML = `<p>Order ID: ${order.id}, Total: $${order.total}, Status: ${order.status}</p>`;
+        orderDetails.appendChild(orderItem);
+      });
+      document.getElementById('orders-list').style.display = 'block';
+    }
   </script>
 </body>
 </html>
