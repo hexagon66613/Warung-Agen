@@ -1,4 +1,3 @@
-// api/products.js
 const products = []; // Replace with a database in production
 
 module.exports = (req, res) => {
@@ -18,7 +17,19 @@ module.exports = (req, res) => {
     }
   }
 
-  // Handle other methods (PUT, DELETE) as needed
-  res.setHeader('Allow', ['GET', 'POST']);
+  if (req.method === 'DELETE') {
+    const { id } = req.query; // Get the product ID from the query parameters
+    const productIndex = products.findIndex(product => product.id === Number(id));
+
+    if (productIndex !== -1) {
+      products.splice(productIndex, 1); // Remove the product from the array
+      return res.status(204).end(); // Respond with no content
+    } else {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+  }
+
+  // Handle other methods (PUT, etc.) as needed
+  res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
   res.status(405).end(`Method ${req.method} Not Allowed`);
 };
