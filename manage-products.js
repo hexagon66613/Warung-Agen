@@ -31,7 +31,7 @@ function displayProducts(products) {
         const productItem = document.createElement('div');
         productItem.innerHTML = `
             <h4>${product.name} - $${product.price}</h4>
-            <button onclick="removeProduct('${product.id}')">Remove</button>
+            <button onclick="removeProduct(${product.id})">Remove</button>
         `;
         productList.appendChild(productItem);
     });
@@ -51,7 +51,7 @@ async function addProduct(product) {
 
 // Remove a product
 async function removeProduct(productId) {
-    await fetch(`https://warung-agen.vercel.app/api/products/${productId}`, {
+    await fetch(`https://warung-agen.vercel.app/api/products?id=${productId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
