@@ -29,8 +29,9 @@ function displayProducts(products) {
 
     products.forEach(product => {
         const productItem = document.createElement('div');
+        productItem.className = 'product-item';
         productItem.innerHTML = `
-            <h4>${product.name} - $${product.price}</h4>
+            <span>${product.name} - Rp${product.price}</span>
             <button onclick="removeProduct(${product.id})">Remove</button>
         `;
         productList.appendChild(productItem);
