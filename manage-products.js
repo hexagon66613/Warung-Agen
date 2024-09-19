@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const name = document.getElementById('product-name').value;
         const price = document.getElementById('product-price').value;
+        const qty = document.getElementById('product-qty').value;
 
-        await addProduct({ name, price });
+        await addProduct({ name, price, qty });
         fetchProducts(); // Refresh product list
     });
 });
@@ -31,23 +32,54 @@ function displayProducts(products) {
         const productItem = document.createElement('div');
         productItem.className = 'product-item';
         productItem.innerHTML = `
-            <span>${product.name} - Rp${product.price}</span>
+            <h4>${product.name} - Rp${product.price} Qty: ${product.qty}</h4>
             <button onclick="removeProduct(${product.id})">Remove</button>
         `;
         productList.appendChild(productItem);
     });
 }
 
-// Add a new product
+// Add a new product or update an existing one
 async function addProduct(product) {
-    await fetch('https://warung-agen.vercel.app/api/products', {
-        method: 'POST',
+    const response = await fetch('https://warung-agen.vercel.app/api/products', {
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-        },
-        body: JSON.stringify(product)
+        }
     });
+    const existingProducts = await response.json();
+
+    // Check if the product already exists
+    const existingProduct = existingProducts.find(p => p.name === product.name);
+
+    if (existingProduct) {
+        // Update existing product
+        const updatedProduct = {
+            id: existingProduct.id,
+            name: product.name,
+            price: product.price,
+            qty: Number(existingProduct.qty) + Number(product.qty) // Sum the quantities
+        };
+        
+        await fetch(`https://warung-agen.vercel.app/api/products/${existingProduct.id}`, {
+            method: 'PUT', // Assuming you have a PUT endpoint to update a product
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+            },
+            body: JSON.stringify(updatedProduct)
+        });
+    } else {
+        // Create new product
+        await fetch('https://warung-agen.vercel.app/api/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+            },
+            body: JSON.stringify(product)
+        });
+    }
 }
 
 // Remove a product
