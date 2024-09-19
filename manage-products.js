@@ -1,3 +1,5 @@
+let products = []; // Start with an empty array to fetch products from the API
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
 
@@ -7,7 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const price = document.getElementById('product-price').value;
         const qty = document.getElementById('product-qty').value;
 
-        await addProduct({ name, price, qty });
+        const existingProduct = products.find(product => product.name === name);
+        
+        if (existingProduct) {
+            await updateProduct({ id: existingProduct.id, price, qty });
+        } else {
+            await addProduct({ name, price, qty });
+        }
         fetchProducts(); // Refresh product list
     });
 });
@@ -20,7 +28,7 @@ async function fetchProducts() {
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
     });
-    const products = await response.json();
+    products = await response.json(); // Store products globally
     displayProducts(products);
 }
 
@@ -30,55 +38,37 @@ function displayProducts(products) {
 
     products.forEach(product => {
         const productItem = document.createElement('div');
-        productItem.className = 'product-item';
+        productItem.classList.add('product-item');
         productItem.innerHTML = `
-            <h4>${product.name} - Rp${product.price} Qty: ${product.qty}</h4>
+            <h4>${product.name} - Rp${product.price} (Qty: ${product.qty})</h4>
             <button onclick="removeProduct(${product.id})">Remove</button>
         `;
         productList.appendChild(productItem);
     });
 }
 
-// Add a new product or update an existing one
+// Add a new product
 async function addProduct(product) {
-    const response = await fetch('https://warung-agen.vercel.app/api/products', {
-        method: 'GET',
+    await fetch('https://warung-agen.vercel.app/api/products', {
+        method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-        }
+        },
+        body: JSON.stringify(product)
     });
-    const existingProducts = await response.json();
+}
 
-    // Check if the product already exists
-    const existingProduct = existingProducts.find(p => p.name === product.name);
-
-    if (existingProduct) {
-        // Update existing product
-        const updatedProduct = {
-            name: product.name,
-            price: product.price,
-            qty: Number(existingProduct.qty) + Number(product.qty) // Sum the quantities
-        };
-        
-        await fetch(`https://warung-agen.vercel.app/api/products/${existingProduct.id}`, {
-            method: 'PATCH', // Use PATCH if that's the correct method for updating
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-            },
-            body: JSON.stringify(updatedProduct)
-        });
-    } else {
-        // Create new product
-        await fetch('https://warung-agen.vercel.app/api/products', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-            },
-            body: JSON.stringify(product)
-        });
-    }
+// Update an existing product
+async function updateProduct(product) {
+    await fetch('https://warung-agen.vercel.app/api/products', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
+        body: JSON.stringify(product)
+    });
 }
 
 // Remove a product
