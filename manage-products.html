@@ -27,7 +27,13 @@
             margin-top: 20px;
         }
         #product-list {
+            max-height: 300px; /* Set a max height for scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
             margin-bottom: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .product-item {
             background: white;
@@ -43,17 +49,13 @@
             display: flex;
             margin-bottom: 20px;
             align-items: center;
-            background: #f4f4f4;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         input[type="text"], input[type="number"] {
             padding: 10px;
             margin-right: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            flex: 0 1 150px;
+            flex: 0 1 150px; /* Flex-basis for width */
             min-width: 0;
         }
         button {
