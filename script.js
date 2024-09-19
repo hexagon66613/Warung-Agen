@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                products = data;
+                products = data.map(product => ({
+                    ...product,
+                    price: Number(product.price) // Ensure price is a number
+                }));
                 displayProducts();
             })
             .catch(error => {
@@ -41,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const quantity = parseInt(quantityInput.value, 10) || 1;
 
         if (product) {
-            cart.push(...Array(quantity).fill(product));
+            for (let i = 0; i < quantity; i++) {
+                cart.push(product);
+            }
             updateCartDisplay();
             alert(`${product.name} added to cart with quantity ${quantity}!`);
         }
@@ -90,7 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const newQuantity = parseInt(quantityInput.value, 10) || 1;
 
         cart = cart.filter(p => p.id !== productId);
-        cart.push(...Array(newQuantity).fill(products.find(p => p.id === productId)));
+        for (let i = 0; i < newQuantity; i++) {
+            cart.push(products.find(p => p.id === productId));
+        }
         updateCartDisplay();
     };
 
