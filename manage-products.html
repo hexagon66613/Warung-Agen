@@ -28,14 +28,9 @@
         }
         #product-list {
             margin-bottom: 20px;
-            max-height: 300px; /* Set a max height */
-            overflow-y: auto; /* Enable vertical scrolling */
-            border: 1px solid #ccc; /* Optional: Add a border for better visibility */
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
         }
         .product-item {
+            background: white;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
@@ -47,15 +42,13 @@
         form {
             display: flex;
             margin-bottom: 20px;
-            align-items: center; /* Center items vertically */
         }
         input[type="text"], input[type="number"] {
             padding: 10px;
             margin-right: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 150px; /* Fixed width */
-            box-sizing: border-box; /* Include padding and border in width */
+            flex: 1;
         }
         button {
             padding: 10px;
@@ -83,6 +76,7 @@
         <form id="add-product-form">
             <input type="text" id="product-name" placeholder="Product Name" required />
             <input type="number" id="product-price" placeholder="Price (RP)" required />
+            <input type="number" id="product-qty" placeholder="Quantity" required />
             <button type="submit">Add Product</button>
         </form>
     </main>
