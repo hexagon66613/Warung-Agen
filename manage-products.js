@@ -55,14 +55,13 @@ async function addProduct(product) {
     if (existingProduct) {
         // Update existing product
         const updatedProduct = {
-            id: existingProduct.id,
             name: product.name,
             price: product.price,
             qty: Number(existingProduct.qty) + Number(product.qty) // Sum the quantities
         };
         
         await fetch(`https://warung-agen.vercel.app/api/products/${existingProduct.id}`, {
-            method: 'PUT', // Assuming you have a PUT endpoint to update a product
+            method: 'PATCH', // Use PATCH if that's the correct method for updating
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
